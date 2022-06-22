@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+</head>
+<body>
+
+{% block content %}
+
+<h2>Create an account</h2>
+
+<form action="." method="post">
+    {% csrf_token %}
+
+    {{ form.first_name }}
+    {{ form.last_name }}
+    {{ form.provide_service }}
+    {{ form.username }}
+    {{ form.password1 }}
+    {{ form.password2 }}
+
+    <button type="submit">Sign up</button>
+
+</form>
+
+{% endblock %}
+
+</body>
+</html>
