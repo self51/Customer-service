@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView, CreateView
 from django.urls import reverse_lazy
-
+from django.shortcuts import render
 
 from .models import User
 from .forms import CustomerSignUpForm, WorkerSignUpForm
@@ -20,3 +20,6 @@ class WorkerSignUpView(CreateView):
     form_class = WorkerSignUpForm
     success_url = reverse_lazy('login')
     template_name = 'registration/signup_form_worker.html'
+
+def account(request):
+    return render(request, 'account/account.html')

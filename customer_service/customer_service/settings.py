@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'authentication',
+    'worker',
+    'appointment',
 ]
 
 MIDDLEWARE = [
@@ -132,3 +134,5 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'authentication.User'
+LOGIN_REDIRECT_URL = 'account'
+LOGOUT_REDIRECT_URL = 'login'
