@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Add a new location</h2>
+
+<form action="." method="post">
+    {% csrf_token %}
+
+    {{ form.weekday }}
+    {{ form.from_hour }}
+    {{ form.to_hour }}
+
+    <button type="submit">Add</button>
+
+</form>
+
+{% endblock %}

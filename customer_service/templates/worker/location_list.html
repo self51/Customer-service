@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Locations</h2>
+
+<a href="add" role="button">Add</a>
+<hr>
+
+{% for location in locations %}
+    {{ location.city }} {{ location.street }} {{ location.house_number }}
+    <a href="update/{{ location.id }}" role="button">Update</a>
+    <a href="delete/{{ location.id }}" role="button">Delete</a>
+    <hr>
+{% endfor %}
+
+{% endblock %}

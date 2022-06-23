@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Account</h2>
+
+Username - {{ user.username }}<hr>
+First name - {{ user.first_name }}<hr>
+Last name - {{ user.last_name }}<hr>
+Date joined - {{ user.date_joined }}<hr>
+
+{% if user.is_worker %}
+    Provide service - {{ user.provide_service }}<hr>
+{% endif %}
+
+{% endblock %}
