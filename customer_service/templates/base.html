@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer service</title>
+</head>
+<body>
+
+    <nav>
+        {% if user.is_worker %}
+            <li><a href="{% url 'schedules' %}">My schedules</a></li>
+            <li><a href="{% url 'locations' %}">My locations</a></li>
+            <li><a href="">My clients</a></li>
+        {% else %}
+            <li><a href="">List of worker</a></li>
+            <li><a href="">My appointments</a></li>
+        {% endif %}
+    </nav>
+
+    {% if user.is_authenticated %}
+        <h2>Hi {{ user.username }}!</h2>
+    <a href="{% url 'logout' %}">log out</a>
+    {% else %}
+        <h2>Welcome to Customer service</h2>
+    {% endif %}
+
+    {% block content %}
+    {% endblock content %}
+
+    <footer>
+        <div>
+            <span>Made by Self</span>
+        </div>
+    </footer>
+
+</body>
+</html>
