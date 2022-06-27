@@ -12,7 +12,7 @@
             <li><a href="{% url 'locations' %}">My locations</a></li>
             <li><a href="">My clients</a></li>
         {% else %}
-            <li><a href="">List of worker</a></li>
+            <li><a href="{% url 'workers' %}">List of worker</a></li>
             <li><a href="">My appointments</a></li>
         {% endif %}
     </nav>

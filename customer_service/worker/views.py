@@ -3,6 +3,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 from .models import Location, Schedule
+from authentication.models import User
 from .forms import LocationForm, ScheduleForm
 
 
@@ -13,6 +14,14 @@ class LocationListView(ListView):
 class ScheduleListView(ListView):
     context_object_name = 'schedules'
     model = Schedule
+
+class WorkerListView(ListView):
+    context_object_name = 'workers'
+    model = User
+    template_name = 'worker/workers.html'
+
+    def get_queryset(self):
+        return User.objects.filter(is_worker=True)
 
 class LocationCreateView(CreateView):
     model = Location
