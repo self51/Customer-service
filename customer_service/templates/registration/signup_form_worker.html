@@ -7,12 +7,16 @@
 <form action="." method="post">
     {% csrf_token %}
 
-    {{ form.first_name }}
-    {{ form.last_name }}
-    {{ form.provide_service }}
-    {{ form.username }}
-    {{ form.password1 }}
-    {{ form.password2 }}
+    <h3>First name</h3>{{ form.first_name }}
+    <h3>Last name</h3>{{ form.last_name }}
+    <h3>Username</h3>{{ form.username }}
+    <h3>Service you can provide</h3>{{ form.provide_service }}
+    <h3>Password</h3>{{ form.password1 }}
+    <h3>Repeat password</h3>{{ form.password2 }}
+
+    {% if form.errors %}
+        <p>{{ form.errors }}</p>
+    {% endif %}
 
     <button type="submit">Sign up</button>
 

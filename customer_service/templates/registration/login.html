@@ -7,8 +7,12 @@
 <form action="." method="post">
     {% csrf_token %}
 
-    {{ form.username }}
-    {{ form.password }}
+    <h3>Username</h3>{{ form.username }}
+    <h3>Password</h3>{{ form.password }}
+
+    {% if form.errors %}
+        <p>Username or password is wrong.</p>
+    {% endif %}
 
     <button type="submit">Log in</button>
 
