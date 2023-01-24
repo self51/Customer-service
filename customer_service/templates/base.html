@@ -6,31 +6,31 @@
 </head>
 <body>
 
-    <nav>
-        {% if user.is_worker %}
-            <li><a href="{% url 'schedules' %}">My schedules</a></li>
-            <li><a href="{% url 'locations' %}">My locations</a></li>
-            <li><a href="">My clients</a></li>
-        {% else %}
-            <li><a href="{% url 'workers' %}">List of worker</a></li>
-            <li><a href="">My appointments</a></li>
-        {% endif %}
-    </nav>
-
     {% if user.is_authenticated %}
+        <nav>
+            {% if user.is_worker %}
+                <li><a href="{% url 'schedules' %}">My schedules</a></li>
+                <li><a href="{% url 'locations' %}">My locations</a></li>
+                <li><a href="">My clients</a></li>
+            {% else %}
+                <li><a href="{% url 'workers' %}">List of worker</a></li>
+                <li><a href="">My appointments</a></li>
+            {% endif %}
+        </nav>
+
         <h2>Hi {{ user.username }}!</h2>
-    <a href="{% url 'logout' %}">log out</a>
+        <a href="{% url 'logout' %}">log out<a>
     {% else %}
-        <h2>Welcome to Customer service</h2>
+        <h2>Welcome to Customer service!</h2>
+        <a href="{% url 'signup' %}">Sign Up</a>
+        <a href="{% url 'login' %}">Log In</a>
     {% endif %}
 
     {% block content %}
     {% endblock content %}
 
     <footer>
-        <div>
-            <span>Made by Self</span>
-        </div>
+        <span>Made by Self</span>
     </footer>
 
 </body>
