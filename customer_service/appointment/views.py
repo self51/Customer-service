@@ -1,10 +1,10 @@
-from django.views.generic import CreateView
 from django.urls import reverse_lazy
+from django.views.generic import CreateView, ListView
 
 from .forms import AppointmentForm
+from .models import Appointment
 from authentication.models import User
 from worker.models import Schedule
-from .models import Appointment
 
 from datetime import time
 
@@ -18,7 +18,7 @@ class AppointmentCreateView(CreateView):
     def get_initial(self):
         initial = super().get_initial()
         worker = User.objects.get(pk=self.kwargs['pk'])
-        schedule = Schedule.objects.get(id=worker.id)
+        schedule = Schedule.objects.get(worker=worker.id)
         HOUR_CHOICES = []
         from_hour = schedule.from_hour
         to_hour = schedule.to_hour
@@ -26,7 +26,7 @@ class AppointmentCreateView(CreateView):
             HOUR_CHOICES.append(from_hour)
             from_hour = time(from_hour.hour + 1, from_hour.minute)
 
-        HOUR_CHOICES = sorted([(valid_time, valid_time.strftime('%H:%M')) for valid_time in HOUR_CHOICES],key=lambda x: x[0])
+        HOUR_CHOICES = sorted([(valid_time, valid_time.strftime('%H:%M')) for valid_time in HOUR_CHOICES], key=lambda x: x[0])
 
         initial['HOUR_CHOICES'] = HOUR_CHOICES
 
@@ -35,3 +35,13 @@ class AppointmentCreateView(CreateView):
     def form_valid(self, form):
         form.instance.worker = User.objects.get(pk=self.kwargs['pk'])
         return super(AppointmentCreateView, self).form_valid(form)
+
+
+class AppointmentListView(ListView):
+    context_object_name = 'appointments'
+    model = Appointment
+    template_name = 'appointments/appointment_list.html'
+
+    def get_queryset(self):
+        user = User.objects.get(id=self.kwargs['pk'])
+        return Appointment.objects.filter(customer=user)

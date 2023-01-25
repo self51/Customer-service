@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>My appointments</h2>
+
+{% for appointment in appointments %}
+    <p>{{ appointment.worker.username }} {{ appointment.location }} {{ appointment.time }}</a></p>
+{% endfor %}
+
+{% endblock %}

@@ -14,7 +14,7 @@
                 <li><a href="">My clients</a></li>
             {% else %}
                 <li><a href="{% url 'workers' %}">List of worker</a></li>
-                <li><a href="">My appointments</a></li>
+                <li><a href="{% url 'appointment:appointments' user.id %}">My appointments</a></li>
             {% endif %}
         </nav>
 
