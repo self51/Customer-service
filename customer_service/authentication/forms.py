@@ -3,6 +3,10 @@ from .models import User
 
 
 class CustomerSignUpForm(UserCreationForm):
+
+    def __init__(self, *args, **kwargs):
+        super(CustomerSignUpForm, self).__init__(*args, **kwargs)
+
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username')
@@ -19,10 +23,12 @@ class CustomerSignUpForm(UserCreationForm):
             user.save()
         return user
 
-    def __init__(self, *args, **kwargs):
-        super(CustomerSignUpForm, self).__init__(*args, **kwargs)
 
 class WorkerSignUpForm(UserCreationForm):
+
+    def __init__(self, *args, **kwargs):
+        super(WorkerSignUpForm, self).__init__(*args, **kwargs)
+
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username', 'provide_service')
@@ -39,6 +45,3 @@ class WorkerSignUpForm(UserCreationForm):
         if commit:
             user.save()
         return user
-
-    def __init__(self, *args, **kwargs):
-        super(WorkerSignUpForm, self).__init__(*args, **kwargs)

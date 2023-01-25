@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import SignUpView, CustomerSignUpView, WorkerSignUpView
 from . import views
+
+from .views import SignUpView, CustomerSignUpView, WorkerSignUpView
 
 
 urlpatterns = [

@@ -1,19 +1,21 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
+from .forms import LocationForm, ScheduleForm
 from .models import Location, Schedule
 from authentication.models import User
-from .forms import LocationForm, ScheduleForm
 
 
 class LocationListView(ListView):
     context_object_name = 'locations'
     model = Location
 
+
 class ScheduleListView(ListView):
     context_object_name = 'schedules'
     model = Schedule
+
 
 class WorkerListView(ListView):
     context_object_name = 'workers'
@@ -22,6 +24,7 @@ class WorkerListView(ListView):
 
     def get_queryset(self):
         return User.objects.filter(is_worker=True)
+
 
 class LocationCreateView(CreateView):
     model = Location
@@ -34,6 +37,7 @@ class LocationCreateView(CreateView):
         form.request = self.request
         return form
 
+
 class ScheduleCreateView(CreateView):
     model = Schedule
     form_class = ScheduleForm
@@ -44,6 +48,7 @@ class ScheduleCreateView(CreateView):
         form = super().get_form(form_class)
         form.request = self.request
         return form
+
 
 class LocationUpdateView(UpdateView):
     model = Location
@@ -56,6 +61,7 @@ class LocationUpdateView(UpdateView):
         form.request = self.request
         return form
 
+
 class ScheduleUpdateView(UpdateView):
     model = Schedule
     form_class = ScheduleForm
@@ -67,10 +73,12 @@ class ScheduleUpdateView(UpdateView):
         form.request = self.request
         return form
 
+
 class LocationDeleteView(DeleteView):
     model = Location
     form_class = LocationForm
     success_url = reverse_lazy('locations')
+
 
 class ScheduleDeleteView(DeleteView):
     model = Schedule
