@@ -19,6 +19,9 @@ class Location(models.Model):
     street = models.CharField(max_length=30, blank=False)
     house_number = models.CharField(max_length=30, blank=False)
 
+    def __str__(self):
+        return '{}, {}, {}'.format(self.city, self.street, self.house_number)
+
 
 class Schedule(models.Model):
     worker = models.ForeignKey(User, on_delete=models.CASCADE)
