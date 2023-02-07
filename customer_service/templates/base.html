@@ -9,11 +9,11 @@
     {% if user.is_authenticated %}
         <nav>
             {% if user.is_worker %}
-                <li><a href="{% url 'schedules' %}">My schedules</a></li>
-                <li><a href="{% url 'locations' %}">My locations</a></li>
+                <li><a href="{% url 'worker:schedules' %}">My schedules</a></li>
+                <li><a href="{% url 'worker:locations' %}">My locations</a></li>
                 <li><a href="">My clients</a></li>
             {% else %}
-                <li><a href="{% url 'workers' %}">List of worker</a></li>
+                <li><a href="{% url 'authentication:workers' %}">List of worker</a></li>
                 <li><a href="{% url 'appointment:appointments' user.id %}">My appointments</a></li>
             {% endif %}
         </nav>
@@ -22,7 +22,7 @@
         <a href="{% url 'logout' %}">log out<a>
     {% else %}
         <h2>Welcome to Customer service!</h2>
-        <a href="{% url 'signup' %}">Sign Up</a>
+        <a href="{% url 'authentication:signup' %}">Sign Up</a>
         <a href="{% url 'login' %}">Log In</a>
     {% endif %}
 
