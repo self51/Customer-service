@@ -7,9 +7,9 @@
 <form action="." method="post">
     {% csrf_token %}
 
-    {{ form.city }}
-    {{ form.street }}
-    {{ form.house_number }}
+    <h3>City</h3>{{ form.city }}
+    <h3>Street</h3>{{ form.street }}
+    <h3>House number</h3>{{ form.house_number }}
 
     <button type="submit">Add</button>
 

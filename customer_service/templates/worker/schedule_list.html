@@ -8,7 +8,7 @@
 <hr>
 
 {% for schedule in schedules %}
-    {{ schedule.weekday }} {{ schedule.from_hour }} {{ schedule.to_hour }}
+    {{ schedule.get_weekday_display }} {{ schedule.from_hour }} {{ schedule.to_hour }}
     <a href="update/{{ schedule.id }}" role="button">Update</a>
     <a href="delete/{{ schedule.id }}" role="button">Delete</a>
     <hr>

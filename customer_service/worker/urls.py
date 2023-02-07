@@ -1,6 +1,11 @@
 from django.urls import path
-from .views import LocationListView, ScheduleListView, ScheduleCreateView, LocationCreateView, LocationUpdateView, ScheduleUpdateView, LocationDeleteView, ScheduleDeleteView, WorkerListView
 
+from .views import (LocationListView, ScheduleListView, ScheduleCreateView,
+                    LocationCreateView, LocationUpdateView, ScheduleUpdateView,
+                    LocationDeleteView, ScheduleDeleteView, )
+
+
+app_name = 'worker'
 urlpatterns = [
     path('location/', LocationListView.as_view(), name='locations'),
     path('location/add/', LocationCreateView.as_view(), name='location_add'),
@@ -10,5 +15,4 @@ urlpatterns = [
     path('schedule/add/', ScheduleCreateView.as_view(), name='schedule_add'),
     path('schedule/update/<int:pk>/', ScheduleUpdateView.as_view(), name='schedule_update'),
     path('schedule/delete/<int:pk>/', ScheduleDeleteView.as_view(), name='schedule_delete'),
-    path('workers/', WorkerListView.as_view(), name='workers'),
 ]
