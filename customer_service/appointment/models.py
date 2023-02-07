@@ -1,17 +1,10 @@
+import datetime
+
 from django.db import models
+from django.core.validators import MinValueValidator
 
 from authentication.models import User
 from worker.models import Location, Schedule
-
-WEEKDAYS_CHOICES = (
-    (1, 'Monday'),
-    (2, 'Tuesday'),
-    (3, 'Wednesday'),
-    (4, 'Thursday'),
-    (5, 'Friday'),
-    (6, 'Saturday'),
-    (7, 'Sunday'),
-)
 
 
 class Appointment(models.Model):
@@ -20,5 +13,5 @@ class Appointment(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='locations')
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     time = models.TimeField()
-    weekday = models.IntegerField(choices=WEEKDAYS_CHOICES)
+    date = models.DateField(validators=[MinValueValidator(datetime.date.today)])
     status = models.BooleanField(default=False)

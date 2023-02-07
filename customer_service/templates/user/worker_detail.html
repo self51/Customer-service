@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Worker detail</h2>
+
+First name - {{ worker.first_name }}<hr>
+Last name - {{ worker.last_name }}<hr>
+Date joined - {{ worker.date_joined }}<hr>
+Provide service - {{ worker.provide_service }}<hr>
+
+{% for day in day_list %}
+
+    <p>{{ day.date }}</p>
+    <p>{{ day.weekday }}</p>
+
+    {% for hour in day.hour_list %}
+        <form action="" method="post">
+            {% csrf_token %}
+            <button name="date_time" value="{{ day.date }}/{{ hour }}">{{ hour }}</button>
+        </form>
+    {% endfor %}
+
+{% endfor %}
+
+{% endblock %}

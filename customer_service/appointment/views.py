@@ -4,36 +4,30 @@ from django.views.generic import CreateView, ListView
 from .forms import AppointmentForm
 from .models import Appointment
 from authentication.models import User
-from worker.models import Schedule
-
-from datetime import time
 
 
 class AppointmentCreateView(CreateView):
     model = Appointment
     form_class = AppointmentForm
     template_name = 'appointment/booking.html'
-    success_url = reverse_lazy('workers')
+    success_url = reverse_lazy('authentication:workers')
 
-    def get_initial(self):
-        initial = super().get_initial()
-        worker = User.objects.get(pk=self.kwargs['pk'])
-        schedule = Schedule.objects.get(worker=worker.id)
-        HOUR_CHOICES = []
-        from_hour = schedule.from_hour
-        to_hour = schedule.to_hour
-        while from_hour <= to_hour:
-            HOUR_CHOICES.append(from_hour)
-            from_hour = time(from_hour.hour + 1, from_hour.minute)
-
-        HOUR_CHOICES = sorted([(valid_time, valid_time.strftime('%H:%M')) for valid_time in HOUR_CHOICES], key=lambda x: x[0])
-
-        initial['HOUR_CHOICES'] = HOUR_CHOICES
-
-        return initial
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.request = self.request
+        return form
 
     def form_valid(self, form):
+        date_time = self.request.session['date_time']
+        date = date_time.split('/')[0]
+        time = date_time.split('/')[1]
+        self.request.session.pop('date_time')
+
         form.instance.worker = User.objects.get(pk=self.kwargs['pk'])
+        form.instance.customer = self.request.user
+        form.instance.date = date
+        form.instance.time = time
+
         return super(AppointmentCreateView, self).form_valid(form)
 
 
