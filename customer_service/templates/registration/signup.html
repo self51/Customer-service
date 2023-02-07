@@ -3,7 +3,7 @@
 {% block content %}
 
   <h1>Sign up to get started</h1>
-  <a href="{% url 'customer_signup' %}" role="button">I'm a customer</a>
-  <a href="{% url 'worker_signup' %}" role="button">I'm a worker</a>
+  <a href="{% url 'authentication:customer_signup' %}" role="button">I'm a customer</a>
+  <a href="{% url 'authentication:worker_signup' %}" role="button">I'm a worker</a>
 
 {% endblock %}
