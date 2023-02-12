@@ -15,3 +15,6 @@ class Appointment(models.Model):
     time = models.TimeField()
     date = models.DateField(validators=[MinValueValidator(datetime.date.today)])
     status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return 'Appointment for {}, {}, {}'.format(self.date, self.time, self.location)

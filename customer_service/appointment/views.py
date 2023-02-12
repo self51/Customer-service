@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import (CreateView, ListView,
+                                  DeleteView, )
 
 from .forms import AppointmentForm
 from .models import Appointment
@@ -31,11 +32,20 @@ class AppointmentCreateView(CreateView):
         return super(AppointmentCreateView, self).form_valid(form)
 
 
-class AppointmentListView(ListView):
+class AppointmentsListView(ListView):
     context_object_name = 'appointments'
     model = Appointment
     template_name = 'appointments/appointment_list.html'
 
     def get_queryset(self):
-        user = User.objects.get(id=self.kwargs['pk'])
-        return Appointment.objects.filter(customer=user)
+        user = self.request.user
+        if user.is_customer:
+            return Appointment.objects.filter(customer=user)
+
+        return Appointment.objects.filter(worker=user)
+
+
+class AppointmentDeleteView(DeleteView):
+    model = Appointment
+    form_class = AppointmentForm
+    success_url = reverse_lazy('appointment:appointments')

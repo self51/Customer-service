@@ -11,10 +11,10 @@
             {% if user.is_worker %}
                 <li><a href="{% url 'worker:schedules' %}">My schedules</a></li>
                 <li><a href="{% url 'worker:locations' %}">My locations</a></li>
-                <li><a href="">My clients</a></li>
+                <li><a href="{% url 'appointment:appointments' %}">My list of customers appointments</a></li>
             {% else %}
                 <li><a href="{% url 'authentication:workers' %}">List of worker</a></li>
-                <li><a href="{% url 'appointment:appointments' user.id %}">My appointments</a></li>
+                <li><a href="{% url 'appointment:appointments' %}">My appointments</a></li>
             {% endif %}
         </nav>
 

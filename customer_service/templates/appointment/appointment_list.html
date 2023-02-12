@@ -2,10 +2,24 @@
 
 {% block content %}
 
-<h2>My appointments</h2>
+{% if user.is_customer %}
 
-{% for appointment in appointments %}
-    <p>{{ appointment.worker.username }} {{ appointment.location }} {{ appointment.time }}</a></p>
-{% endfor %}
+    <h2>My appointments</h2>
+
+    {% for appointment in appointments %}
+        <p>{{ appointment.worker.username }} {{ appointment.location }} {{ appointment.time }} {{ appointment.date }} </p>
+        <a href="{% url 'appointment:appointment_delete' appointment.id %}">Cancel</a>
+    {% endfor %}
+
+{% else  %}
+
+    <h2>My list of customers appointments</h2>
+
+    {% for appointment in appointments %}
+        <p>{{ appointment.customer.username }} {{ appointment.location }} {{ appointment.time }} {{ appointment.date }} </p>
+        <a href="{% url 'appointment:appointment_delete' appointment.id %}">Cancel</a>
+    {% endfor %}
+
+{% endif %}
 
 {% endblock %}
