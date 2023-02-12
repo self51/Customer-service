@@ -28,3 +28,6 @@ class Schedule(models.Model):
     weekday = models.IntegerField(choices=WEEKDAYS_CHOICES)
     from_hour = models.TimeField()
     to_hour = models.TimeField()
+
+    def __str__(self):
+        return 'Time slot on {} from {} to {}'.format(self.get_weekday_display(), self.from_hour, self.to_hour)
