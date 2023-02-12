@@ -2,6 +2,7 @@
 
 #### About
 <br/>This is a pet-project, it should not be used for commercial purposes!
+<br/>This is a project for employees who can provide a service and customers who want to use it.
 
 
 ##### Software that you need
@@ -10,8 +11,8 @@
 * PostgreSQL.
 
 ##### Technology stack:
-* HTML, CSS;
 * Python 3.8, Django 3.2;
+* HTML & CSS;
 * PostgreSQL.
 
 ##### Getting Started
