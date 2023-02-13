@@ -1,5 +1,3 @@
-import datetime
-
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import (TemplateView, CreateView,
@@ -8,6 +6,8 @@ from django.views.generic import (TemplateView, CreateView,
 from .models import User
 from worker.models import Schedule
 from .forms import CustomerSignUpForm, WorkerSignUpForm
+
+from .services import day_list_generate
 
 
 class SignUpView(TemplateView):
@@ -28,35 +28,6 @@ class WorkerSignUpView(CreateView):
     template_name = 'registration/signup_form_worker.html'
 
 
-def hour_list_generate(schedule):
-    hour_list = []
-
-    from_hour = schedule.from_hour
-    to_hour = schedule.to_hour
-    while from_hour <= to_hour:
-        hour_list.append(from_hour.strftime('%H:%M'))
-        from_hour = datetime.time(from_hour.hour + 1, from_hour.minute)
-
-    return hour_list
-
-
-def day_list_generate(schedules):
-    day_list = []
-    today = datetime.date.today()
-    for next_day in range(7):
-        day = {}
-        current_day = today + datetime.timedelta(days=next_day)
-        weekday = current_day.strftime("%A").upper()
-        weekday_number = current_day.weekday()
-        schedule = schedules.get(weekday=weekday_number)
-        day["date"] = str(current_day)
-        day["weekday"] = weekday
-        day["hour_list"] = hour_list_generate(schedule)
-        day_list.append(day)
-
-    return day_list
-
-
 class WorkerDetailView(DetailView):
     context_object_name = 'worker'
     template_name = 'user/worker_detail.html'
@@ -73,7 +44,8 @@ class WorkerDetailView(DetailView):
     def get_queryset(self):
         return User.objects.filter(is_worker=True)
 
-    def post(self, request, *args, **kwargs):
+    @staticmethod
+    def post(request, **kwargs):
         request.session['date_time'] = request.POST.get('date_time')
         return HttpResponseRedirect(reverse('appointment:booking', kwargs={'pk': kwargs['pk']}))
 
