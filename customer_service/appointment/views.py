@@ -5,6 +5,7 @@ from django.views.generic import (CreateView, ListView,
 from .forms import AppointmentForm
 from .models import Appointment
 from authentication.models import User
+from django.http import HttpResponseRedirect
 
 
 class AppointmentCreateView(CreateView):
@@ -19,17 +20,20 @@ class AppointmentCreateView(CreateView):
         return form
 
     def form_valid(self, form):
-        date_time = self.request.session['date_time']
-        date = date_time.split('/')[0]
-        time = date_time.split('/')[1]
-        self.request.session.pop('date_time')
+        if 'date_time' in self.request.session:
+            date_time = self.request.session['date_time']
+            date = date_time.split('/')[0]
+            time = date_time.split('/')[1]
+            self.request.session.pop('date_time')
 
-        form.instance.worker = User.objects.get(pk=self.kwargs['pk'])
-        form.instance.customer = self.request.user
-        form.instance.date = date
-        form.instance.time = time
+            form.instance.worker = User.objects.get(pk=self.kwargs['pk'])
+            form.instance.customer = self.request.user
+            form.instance.date = date
+            form.instance.time = time
 
-        return super(AppointmentCreateView, self).form_valid(form)
+            return super(AppointmentCreateView, self).form_valid(form)
+
+        return HttpResponseRedirect(reverse_lazy('authentication:workers'))
 
 
 class AppointmentsListView(ListView):
