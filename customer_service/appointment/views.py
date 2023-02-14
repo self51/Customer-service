@@ -33,7 +33,7 @@ class AppointmentCreateView(CreateView):
 
             return super(AppointmentCreateView, self).form_valid(form)
 
-        return HttpResponseRedirect(reverse_lazy('authentication:workers'))
+        return HttpResponseRedirect(reverse_lazy('authentication:worker_detail', kwargs={'pk': self.kwargs['pk']}))
 
 
 class AppointmentsListView(ListView):
