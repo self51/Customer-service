@@ -1,5 +1,6 @@
-from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
+from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (TemplateView, CreateView,
                                   DetailView, ListView,)
 
@@ -28,9 +29,10 @@ class WorkerSignUpView(CreateView):
     template_name = 'registration/signup_form_worker.html'
 
 
-class WorkerDetailView(DetailView):
+class WorkerDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'worker'
     template_name = 'user/worker_detail.html'
+    redirect_field_name = reverse_lazy('login')
     success_url = reverse_lazy('appointment:booking')
 
     def get_context_data(self, *args, **kwargs):

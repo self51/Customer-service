@@ -1,17 +1,19 @@
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (CreateView, ListView,
                                   DeleteView, )
 
 from .forms import AppointmentForm
 from .models import Appointment
 from authentication.models import User
-from django.http import HttpResponseRedirect
 
 
-class AppointmentCreateView(CreateView):
+class AppointmentCreateView(LoginRequiredMixin, CreateView):
     model = Appointment
     form_class = AppointmentForm
     template_name = 'appointment/booking.html'
+    redirect_field_name = reverse_lazy('login')
     success_url = reverse_lazy('authentication:workers')
 
     def get_form(self, form_class=None):
@@ -36,10 +38,11 @@ class AppointmentCreateView(CreateView):
         return HttpResponseRedirect(reverse_lazy('authentication:worker_detail', kwargs={'pk': self.kwargs['pk']}))
 
 
-class AppointmentsListView(ListView):
-    context_object_name = 'appointments'
+class AppointmentsListView(LoginRequiredMixin, ListView):
     model = Appointment
+    context_object_name = 'appointments'
     template_name = 'appointments/appointment_list.html'
+    redirect_field_name = reverse_lazy('login')
 
     def get_queryset(self):
         user = self.request.user
@@ -49,7 +52,8 @@ class AppointmentsListView(ListView):
         return Appointment.objects.filter(worker=user)
 
 
-class AppointmentDeleteView(DeleteView):
+class AppointmentDeleteView(LoginRequiredMixin, DeleteView):
     model = Appointment
     form_class = AppointmentForm
+    redirect_field_name = reverse_lazy('login')
     success_url = reverse_lazy('appointment:appointments')

@@ -1,4 +1,5 @@
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (ListView, CreateView,
                                   UpdateView, DeleteView,)
 
@@ -6,20 +7,23 @@ from .forms import LocationForm, ScheduleForm
 from .models import Location, Schedule
 
 
-class LocationListView(ListView):
+class LocationListView(LoginRequiredMixin, ListView):
+    model = Location
     context_object_name = 'locations'
-    model = Location
+    redirect_field_name = reverse_lazy('login')
 
 
-class ScheduleListView(ListView):
+class ScheduleListView(LoginRequiredMixin, ListView):
+    model = Schedule
     context_object_name = 'schedules'
-    model = Schedule
+    redirect_field_name = reverse_lazy('login')
 
 
-class LocationCreateView(CreateView):
+class LocationCreateView(LoginRequiredMixin, CreateView):
     model = Location
     form_class = LocationForm
     template_name = 'worker/location_form.html'
+    redirect_field_name = reverse_lazy('login')
     success_url = reverse_lazy('worker:locations')
 
     def get_form(self, form_class=None):
@@ -28,10 +32,11 @@ class LocationCreateView(CreateView):
         return form
 
 
-class ScheduleCreateView(CreateView):
+class ScheduleCreateView(LoginRequiredMixin, CreateView):
     model = Schedule
     form_class = ScheduleForm
     template_name = 'worker/schedule_form.html'
+    redirect_field_name = reverse_lazy('login')
     success_url = reverse_lazy('worker:schedules')
 
     def get_form(self, form_class=None):
@@ -40,10 +45,11 @@ class ScheduleCreateView(CreateView):
         return form
 
 
-class LocationUpdateView(UpdateView):
+class LocationUpdateView(LoginRequiredMixin, UpdateView):
     model = Location
     form_class = LocationForm
     template_name = 'worker/location_form.html'
+    redirect_field_name = reverse_lazy('login')
     success_url = reverse_lazy('worker:locations')
 
     def get_form(self, form_class=None):
@@ -52,10 +58,11 @@ class LocationUpdateView(UpdateView):
         return form
 
 
-class ScheduleUpdateView(UpdateView):
+class ScheduleUpdateView(LoginRequiredMixin, UpdateView):
     model = Schedule
     form_class = ScheduleForm
     template_name = 'worker/schedule_form.html'
+    redirect_field_name = reverse_lazy('login')
     success_url = reverse_lazy('worker:schedules')
 
     def get_form(self, form_class=None):
@@ -64,13 +71,15 @@ class ScheduleUpdateView(UpdateView):
         return form
 
 
-class LocationDeleteView(DeleteView):
+class LocationDeleteView(LoginRequiredMixin, DeleteView):
     model = Location
     form_class = LocationForm
+    redirect_field_name = reverse_lazy('login')
     success_url = reverse_lazy('worker:locations')
 
 
-class ScheduleDeleteView(DeleteView):
+class ScheduleDeleteView(LoginRequiredMixin, DeleteView):
     model = Schedule
     form_class = ScheduleForm
+    redirect_field_name = reverse_lazy('login')
     success_url = reverse_lazy('worker:schedules')
