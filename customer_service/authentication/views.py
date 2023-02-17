@@ -5,10 +5,9 @@ from django.views.generic import (TemplateView, CreateView,
                                   DetailView, ListView,)
 
 from .models import User
-from worker.models import Schedule
 from .forms import CustomerSignUpForm, WorkerSignUpForm
 
-from .services import day_list_generate
+from .services import ScheduleGenerate
 
 
 class SignUpView(TemplateView):
@@ -38,9 +37,8 @@ class WorkerDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, *args, **kwargs):
         data = super().get_context_data()
         worker = User.objects.get(pk=self.kwargs['pk'])
-        schedules = Schedule.objects.filter(worker=worker.id)
-        data['day_list'] = day_list_generate(schedules)
-
+        schedule = ScheduleGenerate(worker.id)
+        data['day_list'] = schedule.get_day_list()
         return data
 
     def get_queryset(self):
