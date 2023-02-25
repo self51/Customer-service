@@ -21,10 +21,14 @@ class ScheduleGenerate:
     def get_hour_list(self, current_day):
         weekday_number = current_day.weekday()
         current_day_appointments = self.appointments.filter(date=str(current_day))
-        schedule = self.schedules.get(weekday=weekday_number)
+
+        try:
+            schedule = self.schedules.get(weekday=weekday_number)
+        except Schedule.DoesNotExist:
+            return None
+
         from_hour = schedule.from_hour
         to_hour = schedule.to_hour
-
         # extract time from appointment and converts it into the required format
         booked_hours = [appointment.time.strftime('%H:%M') for appointment in current_day_appointments]
         # generates list without booked hours
