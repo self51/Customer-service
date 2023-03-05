@@ -9,7 +9,7 @@ class CustomerSignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username')
+        fields = ('first_name', 'last_name', 'username', 'email', )
         labels = {
             'first_name': 'First name',
             'last_name': 'Last name',
@@ -31,7 +31,7 @@ class WorkerSignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'provide_service')
+        fields = ('first_name', 'last_name', 'username', 'email', )
         labels = {
             'first_name': 'First name',
             'last_name': 'Last name',
