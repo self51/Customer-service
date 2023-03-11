@@ -23,6 +23,6 @@
 
 </form>
 
-<a href="{% provider_login_url 'google' %}">Continue with Google</a>
+<a href="{% provider_login_url 'google' user='is_customer' %}">Continue with Google</a>
 
 {% endblock %}

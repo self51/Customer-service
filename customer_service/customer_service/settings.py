@@ -142,16 +142,19 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# allauth
-SITE_ID = 1
 LOGIN_REDIRECT_URL = 'authentication:account'
 LOGOUT_REDIRECT_URL = 'login'
 AUTH_USER_MODEL = 'authentication.User'
 
+# allauth
+SITE_ID = 1
+ACCOUNT_ADAPTER = 'authentication.adapter.AccountAdapter'
+SOCIALACCOUNT_EMAIL_VERIFICATION = "mandatory"
+SOCIALACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_AUTO_SIGNUP = False
+ACCOUNT_USERNAME_REQUIRED = False
 SOCIALACCOUNT_QUERY_EMAIL = True
-ACCOUNT_LOGOUT_ON_GET = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_SESSION_REMEMBER = False
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {

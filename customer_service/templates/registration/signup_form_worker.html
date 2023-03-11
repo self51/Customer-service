@@ -22,6 +22,6 @@
     <button type="submit">Sign up</button>
 </form>
 
-<a href="{% provider_login_url 'google' %}">Continue with Google</a>
+<a href="{% provider_login_url 'google' user='is_worker' %}">Continue with Google</a>
 
 {% endblock %}
