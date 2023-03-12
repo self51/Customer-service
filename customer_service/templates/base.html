@@ -4,34 +4,35 @@
     <meta charset="UTF-8">
     <title>Customer service</title>
 </head>
-<body>
+    <body>
 
-    {% if user.is_authenticated %}
-        <nav>
-            {% if user.is_worker %}
-                <li><a href="{% url 'worker:schedules' %}">My schedules</a></li>
-                <li><a href="{% url 'worker:locations' %}">My locations</a></li>
-                <li><a href="{% url 'appointment:appointments' %}">My list of customers appointments</a></li>
-            {% else %}
-                <li><a href="{% url 'authentication:workers' %}">List of worker</a></li>
-                <li><a href="{% url 'appointment:appointments' %}">My appointments</a></li>
-            {% endif %}
-        </nav>
+        {% if user.is_authenticated %}
+            <nav>
+                <li><a href="{% url 'authentication:account' %}">My Account</a></li>
+                {% if user.is_worker %}
+                    <li><a href="{% url 'worker:schedules' %}">My schedules</a></li>
+                    <li><a href="{% url 'worker:locations' %}">My locations</a></li>
+                    <li><a href="{% url 'appointment:appointments' %}">My list of customers appointments</a></li>
+                {% else %}
+                    <li><a href="{% url 'authentication:workers' %}">List of worker</a></li>
+                    <li><a href="{% url 'appointment:appointments' %}">My appointments</a></li>
+                {% endif %}
+            </nav>
 
-        <h2>Hi {{ user.username }}!</h2>
-        <a href="{% url 'logout' %}">log out<a>
-    {% else %}
-        <h2>Welcome to Customer service!</h2>
-        <a href="{% url 'authentication:select_user' %}">Sign Up</a>
-        <a href="{% url 'login' %}">Log In</a>
-    {% endif %}
+            <h2>Hi {{ user.username }}!</h2>
+            <a href="{% url 'logout' %}">log out<a>
+        {% else %}
+            <h2>Welcome to Customer service!</h2>
+            <a href="{% url 'authentication:select_user' %}">Sign Up</a>
+            <a href="{% url 'login' %}">Log In</a>
+        {% endif %}
 
-    {% block content %}
-    {% endblock content %}
+        {% block content %}
+        {% endblock content %}
 
-    <footer>
-        <span>Made by Self</span>
-    </footer>
+        <footer>
+            <span>Made by Self</span>
+        </footer>
 
-</body>
+    </body>
 </html>

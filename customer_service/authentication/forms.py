@@ -1,9 +1,10 @@
+from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
+
 from .models import User
 
 
 class CustomerSignUpForm(UserCreationForm):
-
     def __init__(self, *args, **kwargs):
         super(CustomerSignUpForm, self).__init__(*args, **kwargs)
 
@@ -25,13 +26,12 @@ class CustomerSignUpForm(UserCreationForm):
 
 
 class WorkerSignUpForm(UserCreationForm):
-
     def __init__(self, *args, **kwargs):
         super(WorkerSignUpForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'email', )
+        fields = ('first_name', 'last_name', 'username', 'email', 'provide_service', )
         labels = {
             'first_name': 'First name',
             'last_name': 'Last name',
@@ -45,3 +45,23 @@ class WorkerSignUpForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class BaseUpdateForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(BaseUpdateForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        return super().save(commit=commit)
+
+
+class WorkerUpdateForm(BaseUpdateForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username', 'email', 'provide_service', )
+
+
+class CustomerUpdateForm(BaseUpdateForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username', 'email', )

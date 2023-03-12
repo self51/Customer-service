@@ -1,17 +1,34 @@
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import (TemplateView, CreateView,
-                                  DetailView, ListView,)
+from django.views.generic import (TemplateView, CreateView, UpdateView,
+                                  DetailView, ListView, )
 
 from .models import User
-from .forms import CustomerSignUpForm, WorkerSignUpForm
+from .forms import (CustomerSignUpForm, WorkerSignUpForm,
+                    WorkerUpdateForm, CustomerUpdateForm, )
 
 from .services import ScheduleGenerate
 
 
 class SignUpView(TemplateView):
     template_name = 'registration/signup.html'
+
+
+class UserSettings(LoginRequiredMixin, UpdateView):
+    model = User
+    template_name = 'user/settings.html'
+    redirect_field_name = reverse_lazy('login')
+    success_url = reverse_lazy('authentication:account')
+
+    def get_form(self, form_class=None):
+        if self.request.user.is_customer:
+            form = super().get_form(CustomerUpdateForm)
+        else:
+            form = super().get_form(WorkerUpdateForm)
+
+        form.request = self.request
+        return form
 
 
 class CustomerSignUpView(CreateView):
@@ -56,12 +73,13 @@ class WorkerListView(ListView):
     template_name = 'user/workers.html'
 
     def get_queryset(self):
-        return User.objects.filter(is_worker=True)
+        return User.objects.filter(is_worker=True).exclude(provide_service__exact='')
 
 
-class CustomerDetailView(DetailView):
+class CustomerDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'customer'
     template_name = 'user/customer_detail.html'
+    redirect_field_name = reverse_lazy('login')
 
     def get_queryset(self):
         return User.objects.filter(is_customer=True)

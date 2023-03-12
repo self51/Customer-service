@@ -7,10 +7,13 @@
 Username - {{ user.username }}<hr>
 First name - {{ user.first_name }}<hr>
 Last name - {{ user.last_name }}<hr>
+Email - {{ user.email }}<hr>
 Date joined - {{ user.date_joined }}<hr>
 
 {% if user.is_worker %}
     Provide service - {{ user.provide_service }}<hr>
 {% endif %}
+
+<a href="{% url 'authentication:settings' user.id %}" role="button">Settings</a>
 
 {% endblock %}

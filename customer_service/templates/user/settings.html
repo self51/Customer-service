@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Account settings</h2>
+
+<form action="." method="post">
+    {% csrf_token %}
+
+    Username - {{ form.username }}<hr>
+    First name - {{ form.first_name }}<hr>
+    Last name - {{ form.last_name }}<hr>
+    Email - {{ form.email }}<hr>
+
+    {% if user.is_worker %}
+        Provide service - {{ form.provide_service }}<hr>
+    {% endif %}
+
+    {% if form.errors %}
+        <p>{{ form.errors }}</p>
+    {% endif %}
+
+    <button type="submit">Submit</button>
+</form>
+
+{% endblock %}
