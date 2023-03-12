@@ -12,11 +12,19 @@ class LocationListView(LoginRequiredMixin, ListView):
     context_object_name = 'locations'
     redirect_field_name = reverse_lazy('login')
 
+    def get_queryset(self):
+        user = self.request.user
+        return Location.objects.filter(worker=user)
+
 
 class ScheduleListView(LoginRequiredMixin, ListView):
     model = Schedule
     context_object_name = 'schedules'
     redirect_field_name = reverse_lazy('login')
+
+    def get_queryset(self):
+        user = self.request.user
+        return Schedule.objects.filter(worker=user)
 
 
 class LocationCreateView(LoginRequiredMixin, CreateView):
