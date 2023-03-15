@@ -14,6 +14,6 @@ Date joined - {{ user.date_joined }}<hr>
     Provide service - {{ user.provide_service }}<hr>
 {% endif %}
 
-<a href="{% url 'authentication:settings' user.id %}" role="button">Settings</a>
+<a href="{% url 'authentication:settings' %}" role="button">Settings</a>
 
 {% endblock %}

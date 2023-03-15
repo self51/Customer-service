@@ -12,7 +12,7 @@ from .services import ScheduleGenerate
 
 
 class SignUpView(TemplateView):
-    template_name = 'registration/signup.html'
+    template_name = 'registration/signup.   html'
 
 
 class UserSettings(LoginRequiredMixin, UpdateView):
@@ -21,12 +21,14 @@ class UserSettings(LoginRequiredMixin, UpdateView):
     redirect_field_name = reverse_lazy('login')
     success_url = reverse_lazy('authentication:account')
 
+    def get_object(self, queryset=None):
+        return self.request.user
+
     def get_form(self, form_class=None):
         if self.request.user.is_customer:
             form = super().get_form(CustomerUpdateForm)
         else:
             form = super().get_form(WorkerUpdateForm)
-
         form.request = self.request
         return form
 

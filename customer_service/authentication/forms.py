@@ -47,21 +47,25 @@ class WorkerSignUpForm(UserCreationForm):
         return user
 
 
-class BaseUpdateForm(ModelForm):
+class WorkerUpdateForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        super(BaseUpdateForm, self).__init__(*args, **kwargs)
+        super(WorkerUpdateForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username', 'email', 'provide_service', )
 
     def save(self, commit=True):
         return super().save(commit=commit)
 
 
-class WorkerUpdateForm(BaseUpdateForm):
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'username', 'email', 'provide_service', )
+class CustomerUpdateForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomerUpdateForm, self).__init__(*args, **kwargs)
 
-
-class CustomerUpdateForm(BaseUpdateForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username', 'email', )
+
+    def save(self, commit=True):
+        return super().save(commit=commit)
