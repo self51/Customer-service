@@ -11,6 +11,7 @@
     First name - {{ form.first_name }}<hr>
     Last name - {{ form.last_name }}<hr>
     Email - {{ form.email }}<hr>
+    Password - <a href="{% url 'authentication:change_password' %}">Change password</a><hr>
 
     {% if user.is_worker %}
         Provide service - {{ form.provide_service }}<hr>
@@ -20,7 +21,7 @@
         <p>{{ form.errors }}</p>
     {% endif %}
 
-    <button type="submit">Submit</button>
+    <button type="submit">Submit</button><hr>
 </form>
 
 {% endblock %}
