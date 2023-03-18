@@ -23,18 +23,23 @@ class ScheduleGenerate:
         current_day_appointments = self.appointments.filter(date=str(current_day))
 
         try:
-            schedule = self.schedules.get(weekday=weekday_number)
+            schedules = self.schedules.filter(weekday=weekday_number)
         except Schedule.DoesNotExist:
             return None
 
-        from_hour = schedule.from_hour
-        to_hour = schedule.to_hour
-        # extract time from appointment and converts it into the required format
-        booked_hours = [appointment.time.strftime('%H:%M') for appointment in current_day_appointments]
-        # generates list without booked hours
-        hour_list = [hour for hour in self.hour_list_generator(from_hour, to_hour, booked_hours)]
+        finally_hour_list = []
+        for schedule in schedules:
+            from_hour = schedule.from_hour
+            to_hour = schedule.to_hour
 
-        return hour_list
+            # extract time from appointment and converts it into the required format
+            booked_hours = [appointment.time.strftime('%H:%M') for appointment in current_day_appointments]
+
+            # generates list without booked hours
+            hour_list = [hour for hour in self.hour_list_generator(from_hour, to_hour, booked_hours)]
+            finally_hour_list = finally_hour_list + hour_list
+
+        return finally_hour_list
 
     def get_day_list(self):
         today = date.today()
