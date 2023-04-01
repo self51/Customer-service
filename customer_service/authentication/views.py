@@ -54,10 +54,12 @@ class WorkerDetailView(LoginRequiredMixin, DetailView):
     success_url = reverse_lazy('appointment:booking')
 
     def get_context_data(self, *args, **kwargs):
-        data = super().get_context_data()
+        data = super().get_context_data(**kwargs)
         worker = User.objects.get(pk=self.kwargs['pk'])
+        day_str = self.request.GET.get('day', None)
         schedule = ScheduleGenerate(worker.id)
-        data['day_list'] = schedule.get_day_list()
+        schedule = ScheduleGenerate.define_day(worker.id, day_str) if day_str else schedule
+        data['week'] = schedule.get_week()
         return data
 
     def get_queryset(self):

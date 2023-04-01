@@ -1,4 +1,5 @@
-from datetime import date, time, timedelta
+from datetime import (date, time,
+                      timedelta, datetime, )
 
 from appointment.models import Appointment
 from worker.models import Schedule
@@ -6,10 +7,16 @@ from worker.models import Schedule
 
 class ScheduleGenerate:
 
-    def __init__(self, worker_id):
+    def __init__(self, worker_id, start_day=date.today()):
         self.worker_id = worker_id
+        self.start_day = start_day
         self.schedules = Schedule.objects.filter(worker=worker_id)
         self.appointments = Appointment.objects.filter(worker=worker_id)
+
+    @classmethod
+    def define_day(cls, worker_id, start_day_str):
+        start_day_obj = datetime.strptime(start_day_str, "%B %d, %Y").date()
+        return cls(worker_id, start_day_obj)
 
     @staticmethod
     def hour_list_generator(from_hour, to_hour, booked_hours):
@@ -42,11 +49,9 @@ class ScheduleGenerate:
         return finally_hour_list
 
     def get_day_list(self):
-        today = date.today()
-
         day_list = []
         for next_day in range(7):
-            current_day = today + timedelta(days=next_day)
+            current_day = self.start_day + timedelta(days=next_day)
             weekday = current_day.strftime("%A").upper()
             day = {
                 "date": str(current_day),
@@ -56,3 +61,11 @@ class ScheduleGenerate:
             day_list.append(day)
 
         return day_list
+
+    def get_week(self):
+        week = {
+            "back": self.start_day - timedelta(7),
+            "forward": self.start_day + timedelta(7),
+            "day_list": self.get_day_list(),
+        }
+        return week
