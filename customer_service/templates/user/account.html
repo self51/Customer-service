@@ -14,6 +14,12 @@ Date joined - {{ user.date_joined }}<hr>
     Provide service - {{ user.provide_service }}<hr>
 {% endif %}
 
+{% if user.google_calendar_credentials != None %}
+    Google Calendar - <a href="{% url 'authentication:calendar_delete' %}">Disable Google calendar</a><hr>
+{% else %}
+    Google Calendar - <a href="{% url 'authentication:google_permission' %}">Connect Google calendar</a><hr>
+{% endif %}
+
 <a href="{% url 'authentication:settings' %}" role="button">Settings</a>
 
 {% endblock %}

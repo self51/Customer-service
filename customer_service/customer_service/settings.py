@@ -42,13 +42,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'authentication',
+    'worker',
+    'appointment',
+
+    # django-allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'authentication',
-    'worker',
-    'appointment',
 ]
 
 MIDDLEWARE = [
@@ -146,8 +148,8 @@ LOGIN_REDIRECT_URL = 'authentication:account'
 LOGOUT_REDIRECT_URL = 'login'
 AUTH_USER_MODEL = 'authentication.User'
 
-# allauth
-SITE_ID = 1
+# Set up django-allauth
+SITE_ID = 2
 ACCOUNT_ADAPTER = 'authentication.adapter.AccountAdapter'
 SOCIALACCOUNT_EMAIL_VERIFICATION = "mandatory"
 SOCIALACCOUNT_EMAIL_REQUIRED = True
@@ -167,3 +169,14 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+# Set up Google Calendar API
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+CLIENT_SECRETS_FILE = env('CLIENT_SECRET_JSON')
+REDIRECT_URL = 'http://127.0.0.1:8000/accounts/google/login/callback/calendar'
+SCOPES = [
+    "https://www.googleapis.com/auth/userinfo.profile",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/calendar",
+    "openid",
+]
