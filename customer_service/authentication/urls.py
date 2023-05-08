@@ -4,7 +4,8 @@ from django.contrib.auth import views as auth_views
 
 from .views import (SignUpView, CustomerSignUpView, WorkerSignUpView,
                     WorkerListView, CustomerListView, WorkerDetailView,
-                    CustomerDetailView, UserSettings, )
+                    CustomerDetailView, UserSettings)
+from . import views
 
 
 app_name = 'authentication'
@@ -24,4 +25,7 @@ urlpatterns = [
         ),
         name='change_password'
     ),
+    path('google/calendar/init/', views.google_calendar_init, name='google_permission'),
+    path('google/login/callback/calendar/', views.google_calendar_redirect, name='google_redirect'),
+    path('google/calendar/disconnect', views.disable_google_calendar, name='calendar_delete'),
 ]
