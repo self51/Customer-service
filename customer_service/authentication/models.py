@@ -1,7 +1,4 @@
-import json
-
 from django.db import models
-from django.forms import JSONField
 from django.contrib.auth.models import AbstractUser
 
 import allauth
@@ -35,15 +32,4 @@ class User(AbstractUser):
     is_customer = models.BooleanField('customer status', default=False)
     is_worker = models.BooleanField('worker status', default=False)
     provide_service = models.CharField(max_length=35, blank=False)
-    google_calendar_credentials = JSONField()
-
-    def set_google_calendar_credentials(self, credentials):
-        self.google_calendar_credentials = json.dumps(credentials)
-
-    def get_google_calendar_credentials(self):
-        if self.google_calendar_credentials:
-            return json.loads(self.google_calendar_credentials)
-        return None
-
-    def delete_google_calendar_credentials(self):
-        self.google_calendar_credentials = None
+    google_calendar_credentials = models.JSONField(blank=True, null=True)

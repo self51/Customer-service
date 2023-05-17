@@ -134,13 +134,15 @@ def google_calendar_redirect(request):
     # Save credentials to database
     credentials = credentials_to_dict(flow.credentials)
     user = User.objects.get(pk=request.user.id)
-    user.set_google_calendar_credentials(credentials)
+    user.google_calendar_credentials = credentials
+    user.save()
 
     return HttpResponseRedirect(reverse('authentication:account'))
 
 
-def disable_google_calendar(request):
-    # Deletes json with credentials form DB
+def disconnect_google_calendar(request):
+    # Deletes dict with credentials form DB
     user = User.objects.get(pk=request.user.id)
-    user.delete_google_calendar_credentials()
+    user.google_calendar_credentials = None
+    user.save()
     return HttpResponseRedirect(reverse('authentication:account'))

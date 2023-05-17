@@ -2,10 +2,10 @@ from django.urls import path
 from django.views.generic.base import TemplateView
 from django.contrib.auth import views as auth_views
 
+from . import views
 from .views import (SignUpView, CustomerSignUpView, WorkerSignUpView,
                     WorkerListView, CustomerListView, WorkerDetailView,
-                    CustomerDetailView, UserSettings)
-from . import views
+                    CustomerDetailView, UserSettings, )
 
 
 app_name = 'authentication'
@@ -27,5 +27,5 @@ urlpatterns = [
     ),
     path('google/calendar/init/', views.google_calendar_init, name='google_permission'),
     path('google/login/callback/calendar/', views.google_calendar_redirect, name='google_redirect'),
-    path('google/calendar/disconnect', views.disable_google_calendar, name='calendar_delete'),
+    path('google/calendar/disconnect', views.disconnect_google_calendar, name='disconnect_google_calendar'),
 ]
