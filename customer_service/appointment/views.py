@@ -7,6 +7,7 @@ from django.views.generic import (CreateView, ListView,
 from .forms import AppointmentForm
 from .models import Appointment
 from authentication.models import User
+from .services import GoogleCalendarService
 
 
 class AppointmentCreateView(LoginRequiredMixin, CreateView):
@@ -23,15 +24,23 @@ class AppointmentCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         if 'date_time' in self.request.session:
-            date_time = self.request.session['date_time']
-            date = date_time.split('/')[0]
-            time = date_time.split('/')[1]
+            # Gets "date_time" and divides by "/", as result, we get list: date, time
+            date_time = self.request.session['date_time'].split('/')
+            date = date_time[0]
+            time = date_time[1]
             self.request.session.pop('date_time')
 
-            form.instance.worker = User.objects.get(pk=self.kwargs['pk'])
+            worker = User.objects.get(pk=self.kwargs['pk'])
+            form.instance.worker = worker
             form.instance.customer = self.request.user
             form.instance.date = date
             form.instance.time = time
+            location = form.instance.location
+
+            if self.request.user.google_calendar_credentials is not None:
+                google_calendar = GoogleCalendarService(self.request.user, worker.username,
+                                                        location, date, time)
+                google_calendar.create_event()
 
             return super(AppointmentCreateView, self).form_valid(form)
 
