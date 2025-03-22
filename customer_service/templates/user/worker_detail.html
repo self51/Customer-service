@@ -13,16 +13,16 @@ Provide service - {{ worker.provide_service }}<hr>
     <tr>
         <td>
             <form action="" method="get">
-                <button name="day" value="{{ week.back }}">back</button>
+                <button name="day" value="{{ week.previous_week_day }}">Previous Week</button>
             </form>
         </td>
-        {% for day in week.day_list %}
+        {% for day in week.days %}
             <td style="display: flex; align-items: center;">
 
                 <p>{{ day.date }}</p>
                 <p>{{ day.weekday }}</p>
 
-                {% for hour in day.hour_list %}
+                {% for hour in day.hours %}
                     <form action="" method="post">
                         {% csrf_token %}
                         <button name="date_time" value="{{ day.date }}/{{ hour }}">{{ hour }}</button>
@@ -32,7 +32,7 @@ Provide service - {{ worker.provide_service }}<hr>
         {% endfor %}
         <td>
             <form action="" method="get">
-                <button name="day" value="{{ week.forward }}">forward</button>
+                <button name="day" value="{{ week.next_week_day }}">Next Week</button>
             </form>
         </td>
     </tr>

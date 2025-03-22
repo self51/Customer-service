@@ -1,13 +1,25 @@
-from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from common.config.settings import APPOINTMENT_TIME_ZONE_KYIV
+from common.custom_types.custom_types import Args, Kwargs, LocationID, WorkerID
+from common.permissions.permissions import IsObjectOwner
+from common.pydantic_models.location import LocationData
+from common.pydantic_models.user import CustomerCredentialsModel
+from core.appointment.models import AppointmentInputData
+from dependency_injector.wiring import Provide, inject
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import (CreateView, ListView,
-                                  DeleteView, )
+from django.http import HttpRequest, HttpResponseBadRequest, HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, ListView
 
 from .forms import AppointmentForm
 from .models import Appointment
-from authentication.models import User
-from .services import GoogleCalendarService
+
+if TYPE_CHECKING:
+    from core.appointment.interfaces import CreateAppointmentUseCase
+    from django.db.models import QuerySet
 
 
 class AppointmentCreateView(LoginRequiredMixin, CreateView):
@@ -15,45 +27,43 @@ class AppointmentCreateView(LoginRequiredMixin, CreateView):
     form_class = AppointmentForm
     template_name = 'appointment/booking.html'
     redirect_field_name = reverse_lazy('login')
-    success_url = reverse_lazy('authentication:workers')
 
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        form.request = self.request
-        return form
-
-    def form_valid(self, form):
-        if 'date_time' in self.request.session:
-            # Gets "date_time" and divides by "/", as result, we get list: date, time
-            date_time = self.request.session['date_time'].split('/')
-            date = date_time[0]
-            time = date_time[1]
-            self.request.session.pop('date_time')
-
-            worker = User.objects.get(pk=self.kwargs['pk'])
-            form.instance.worker = worker
-            form.instance.customer = self.request.user
-            form.instance.date = date
-            form.instance.time = time
-            location = form.instance.location
-
-            if self.request.user.google_calendar_credentials is not None:
-                google_calendar = GoogleCalendarService(self.request.user, worker.username,
-                                                        location, date, time)
-                google_calendar.create_event()
-
-            return super(AppointmentCreateView, self).form_valid(form)
-
-        return HttpResponseRedirect(reverse_lazy('authentication:worker_detail', kwargs={'pk': self.kwargs['pk']}))
+    @inject
+    def post(
+        self,
+        request: HttpRequest,
+        create_appointment_u_c: CreateAppointmentUseCase = Provide[
+            'create_appointment_u_c'
+        ],
+        *args: Args,
+        **kwargs: Kwargs,
+    ) -> HttpResponseRedirect | HttpResponseBadRequest:
+        appointment_form = self.get_form()
+        appointment_form.is_valid()
+        if not (location := appointment_form.cleaned_data.get('location')):
+            return HttpResponseBadRequest('Missing required parameter')
+        create_appointment_u_c(
+            appointment_input_data=AppointmentInputData(
+                worker_id=WorkerID(int(self.kwargs['pk'])),
+                location_data=LocationData(
+                    location_id=LocationID(location.id), address=(str(location))
+                ),
+                date_time=self.request.session.pop('date_time'),
+                customer_credentials=CustomerCredentialsModel.model_validate(
+                    self.request.user
+                ),
+            ),
+            time_zone=APPOINTMENT_TIME_ZONE_KYIV,
+        )
+        return HttpResponseRedirect(reverse_lazy('appointment:appointments'))
 
 
 class AppointmentsListView(LoginRequiredMixin, ListView):
     model = Appointment
     context_object_name = 'appointments'
-    template_name = 'appointments/appointment_list.html'
     redirect_field_name = reverse_lazy('login')
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Appointment]:
         user = self.request.user
         if user.is_customer:
             return Appointment.objects.filter(customer=user)
@@ -66,3 +76,8 @@ class AppointmentDeleteView(LoginRequiredMixin, DeleteView):
     form_class = AppointmentForm
     redirect_field_name = reverse_lazy('login')
     success_url = reverse_lazy('appointment:appointments')
+
+    def get_object(self, queryset: QuerySet[Appointment] = None) -> Appointment:
+        obj: Appointment = super().get_object(queryset)
+        IsObjectOwner.ensure_customer_or_worker_access(self.request, obj)
+        return obj

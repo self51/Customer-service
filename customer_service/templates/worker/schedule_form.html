@@ -7,12 +7,24 @@
 <form action="." method="post">
     {% csrf_token %}
 
-    <h3>Weekday</h3>{{ form.weekday }}
-    <h3>From hour</h3>{{ form.from_hour }}
-    <h3>To hour</h3>{{ form.to_hour }}
+    <div>
+        <h3>Weekday</h3>
+        {{ form.weekday }}
+    </div>
 
-    <button type="submit">Add</button>
+    <div>
+        <h3>From Hour</h3>
+        <input type="time" name="from_hour" step="3600" required>
+    </div>
 
+    <div>
+        <h3>To Hour</h3>
+        <input type="time" name="to_hour" step="3600" required>
+    </div>
+
+    <div>
+        <button type="submit">Add</button>
+    </div>
 </form>
 
 {% endblock %}

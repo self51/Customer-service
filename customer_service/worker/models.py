@@ -1,6 +1,5 @@
-from django.db import models
-
 from authentication.models import User
+from django.db import models
 
 WEEKDAYS_CHOICES = (
     (0, 'Monday'),
@@ -19,8 +18,8 @@ class Location(models.Model):
     street = models.CharField(max_length=30, blank=False)
     house_number = models.CharField(max_length=30, blank=False)
 
-    def __str__(self):
-        return '{}, {}, {}'.format(self.city, self.street, self.house_number)
+    def __str__(self) -> str:
+        return f'{self.city}, {self.street}, {self.house_number}'
 
 
 class Schedule(models.Model):
@@ -29,5 +28,5 @@ class Schedule(models.Model):
     from_hour = models.TimeField()
     to_hour = models.TimeField()
 
-    def __str__(self):
-        return 'Time slot on {} from {} to {}'.format(self.get_weekday_display(), self.from_hour, self.to_hour)
+    def __str__(self) -> str:
+        return f'Time slot on {self.get_weekday_display()} from {self.from_hour} to {self.to_hour}'

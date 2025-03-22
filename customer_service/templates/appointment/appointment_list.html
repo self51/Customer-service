@@ -8,7 +8,7 @@
 
     {% for appointment in appointments %}
         <p>{{ appointment.worker.username }} {{ appointment.location }} {{ appointment.time }} {{ appointment.date }} </p>
-        <a href="{% url 'appointment:appointment_delete' appointment.id %}">Cancel</a>
+        <a href="{% url 'appointment:appointments-delete' appointment.id %}">Cancel</a>
     {% endfor %}
 
 {% else  %}
@@ -17,7 +17,7 @@
 
     {% for appointment in appointments %}
         <p>{{ appointment.customer.username }} {{ appointment.location }} {{ appointment.time }} {{ appointment.date }} </p>
-        <a href="{% url 'appointment:appointment_delete' appointment.id %}">Cancel</a>
+        <a href="{% url 'appointment:appointments-delete' appointment.id %}">Cancel</a>
     {% endfor %}
 
 {% endif %}

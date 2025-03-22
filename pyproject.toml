@@ -1,0 +1,118 @@
+[tool.poetry]
+name = "customer-service"
+version = "0.1.0"
+description = "A web application has been created for service providers and customers looking to schedule a service."
+authors = ["Roman Babii <ggdiscone@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.1.6"
+psycopg = "^3.2.4"
+django-environ = "^0.12.0"
+django-allauth = "^65.4.1"
+google-auth-oauthlib = "^1.0"
+google-api-python-client = "^2.87"
+poetry = "^2.1.1"
+update = "^0.0.1"
+pydantic = "^2.10.6"
+pydantic-settings = "^2.8.1"
+dependency-injector = "^4.46.0"
+pyjwt = "^2.10.1"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.15.0"
+types-pyyaml = "^6.0.12.20241230"
+types-requests = "^2.32.0.20250301"
+types-setuptools = "^75.8.2.20250301"
+pre-commit = "^4.1.0"
+ruff = "^0.9.9"
+bandit = "^1.8.3"
+mypy-extensions = "^1.0.0"
+
+[build-system]
+requires = ['poetry-core']
+build-backend = 'poetry.core.masonry.api'
+
+[tool.ruff.lint]
+select = ['ALL']
+ignore = [
+    'ANN401',
+    'ARG002',
+    'B008',
+    'COM812',
+    'D100',
+    'D101',
+    'D102',
+    'D103',
+    'D104',
+    'D105',
+    'D106',
+    'D107',
+    'D203',
+    'D213',
+    'D401',
+    'DTZ007',
+    'E501',
+    'EXE001',
+    'FBT001',
+    'FBT002',
+    'Q000',
+    'Q000',
+    'Q003',
+    'RUF012',
+    'TC001',
+    'TC002',
+    'TC003',
+]
+exclude = [
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".venv",
+    "__pypackages__",
+    "venv",
+]
+
+[tool.ruff.format]
+quote-style = 'single'
+
+[tool.black]
+line-length = 120
+skip-string-normalization = false
+
+[tool.flake8]
+max-line-length = 120
+max-complexity = 10
+select = ['ALL']
+ignore = ['E203', 'E501', 'W503']
+target-version = 'py311'
+
+[tool.isort]
+line_length = 120
+profile = 'black'
+
+[tool.pytest.ini_options]
+addopts = '--maxfail=5 --disable-warnings -q'
+
+[tool.mypy]
+warn_return_any = true
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_decorators = true
+strict_optional = true
+check_untyped_defs = true
+no_implicit_optional = true
+disable_error_code = ['misc', 'no-redef', 'name-defined']
+exclude = []
+
+plugins = ['pydantic.mypy']
+
+[tool.pydantic-mypy]
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true

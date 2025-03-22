@@ -20,7 +20,10 @@
             </nav>
 
             <h2>Hi {{ user.username }}!</h2>
-            <a href="{% url 'logout' %}">log out</a>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Log out</button>
+            </form>
         {% else %}
             <h2>Welcome to Customer service!</h2>
             <a href="{% url 'authentication:select_user' %}">Sign Up</a>
